@@ -3,23 +3,24 @@ outputDir = [parentDir '/output/'];
 readinputs(parentDir);
 u_star_in = u_star; clear u_star;
 BLH = 1500.0;
-ustar = 0.42;
+ustar = 0.44;
 refLevels = 3:3:62; %64; % total 21 levels
 nscale = log(2048)/log(2);
-data = load('wav_t_m_n_chnl_sgsFluc.mat');
+data = load('wav_t_m_n_chnl.mat');
 tenergy = data.tenergy;
 LineMarkers = {'co-', 'm--', 'b.-', 'r:', 'c-+', 'm-o', 'b-s', 'r-d', 'c-^','m-*'}; % 10 types total
 LineColors = {rgb('Salmon'), rgb('Pink'), rgb('Orange'), rgb('Cyan'), rgb('SkyBlue'),...
               rgb('Violet'), rgb('Silver'), rgb('Tomato'), rgb('Olive'), rgb('Blue')};  %10 types total         
 dummy = mClass(nscale);
-nframe = 1;
+nframe = 4;
 %%
 %
-figWidth = 11; figHeight = figWidth/1.6;  formatEng = '-depsc';
+figWidth = 6.5; figHeight = figWidth/1.2;  formatEng = '-depsc';
 opengl('save','software');
 m_st = 4; 
-%plot a fixed n vs all m at different heights
+%plot a fixed n vs all m at different heightsi
 figh = figure(); set(gcf,'Renderer','painters');
+set(figh, 'Visible','off');
 set(gcf, 'PaperUnits', 'inches', 'PaperPosition', [0 0 figWidth figHeight]);
 set(gcf, 'PaperPositionMode','Auto');
 text_x_pos = 0.60;
@@ -50,20 +51,19 @@ for hh=1:length(refLevels)
 end
 hold all;
 for mmm = 1:size(m_data,2)
-    plot(heightVec./BLH, m_data(:,mmm)./ustar^3,LineMarkers{mmm});
+    plot(heightVec./BLH, m_data(:,mmm)./ustar^3,LineMarkers{mmm},'MarkerSize',3);
 end
 plot([0 1], [0 0],'--k');
-
+ylim([-0.6 1.2]);
 lgndVal = cell([numel(possible_m) 1]);
 for ll = 1:numel(possible_m)
-    lgndVal{ll} = sprintf('r_n/\\delta=%2.2f',tenergy{1}.m_in_m(possible_m(ll))/BLH);
+    lgndVal{ll} = sprintf('r_m/\\delta=%2.2f',tenergy{1}.m_in_m(possible_m(ll))/BLH);
 end
-% lgndh = legendflex(lgndVal, 'nrow', 1,'ncol',6,'box','off','ref', ...
-%     gca, 'anchor', [6 2], 'buffer', [0 -10],'FontSize',8);
-ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
-text(text_x_pos,text_y_pos*0.9, ann_str,'Units','Normalized','FontSize',8);
+ann_str = sprintf('r_n\\equiv%2.2f\\delta',n_scale/BLH);
+text(text_x_pos*0.9,text_y_pos*0.95, ann_str,'Units','Normalized','FontSize',8);
 set(gca,'FontSize',8);
 ylabel('T^{(m,n)}(z,k_m|k_n)/u_*^3','FontSize',8);
+set(gca,'XMinorTick','on','YMinorTick','on');
 box on;
 %----------------------------------------------------------------------------
 subplot(5,3,[2,5]);
@@ -100,9 +100,11 @@ for mmm = 1:size(m_data,2)
     plot(heightVec./BLH, m_data(:,mmm)./ustar^3,LineMarkers{mmm});
 end
 plot([0 1], [0 0],'--k');
-ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
-text(text_x_pos,text_y_pos*0.9, ann_str,'Units','Normalized','FontSize',8);
+ylim([-0.6 1.2]);
+ann_str = sprintf('r_n\\equiv%2.2f\\delta',n_scale/BLH);
+text(text_x_pos*0.9,text_y_pos*0.95, ann_str,'Units','Normalized','FontSize',8);
 set(gca,'FontSize',8);
+set(gca,'XMinorTick','on','YMinorTick','on');
 box on;
 %----------------------------------------------------------------------------
 subplot(5,3,[3,6]);
@@ -139,10 +141,12 @@ for mmm = 1:size(m_data,2)
     plot(heightVec./BLH, m_data(:,mmm)./ustar^3,LineMarkers{mmm});
 end
 plot([0 1], [0 0],'--k');
-ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
-text(text_x_pos,text_y_pos*0.9, ann_str,'Units','Normalized','FontSize',8);
+ylim([-0.6 1.2]);
+ann_str = sprintf('r_n\\equiv%2.2f\\delta',n_scale/BLH);
+text(text_x_pos*0.9,text_y_pos*0.95, ann_str,'Units','Normalized','FontSize',8);
 xlabel('z/\delta','FontSize',8);
 set(gca,'FontSize',8);
+set(gca,'XMinorTick','on','YMinorTick','on');
 box on;
 %----------------------------------------------------------------------------
 subplot(5,3,[7,10]);
@@ -179,12 +183,14 @@ for mmm = 1:size(m_data,2)
     plot(heightVec./BLH, m_data(:,mmm)./ustar^3,LineMarkers{mmm});
 end
 plot([0 1], [0 0],'--k');
-ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
-text(text_x_pos,text_y_pos*1, ann_str,'Units','Normalized','FontSize',8);
+ylim([-0.6 1.2]);
+ann_str = sprintf('r_n\\equiv%2.2f\\delta',n_scale/BLH);
+text(text_x_pos*0.9,text_y_pos*1.075, ann_str,'Units','Normalized','FontSize',8);
 xlabel('z/\delta','FontSize',8);
 ylabel('T^{(m,n)}(z,k_m|k_n)/u_*^3','FontSize',8);
 set(gca,'FontSize',8);
 ylim([-0.6 0.6]);
+set(gca,'XMinorTick','on','YMinorTick','on');
 box on;
 %----------------------------------------------------------------------------
 subplot(5,3,[8,11]);
@@ -221,11 +227,12 @@ for mmm = 1:size(m_data,2)
     plot(heightVec./BLH, m_data(:,mmm)./ustar^3,LineMarkers{mmm});
 end    
 plot([0 1], [0 0],'--k');
-ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
-text(text_x_pos,text_y_pos*0.9, ann_str,'Units','Normalized','FontSize',8);
+ann_str = sprintf('r_n\\equiv%2.2f\\delta',n_scale/BLH);
+text(text_x_pos*0.9,text_y_pos*0.95, ann_str,'Units','Normalized','FontSize',8);
 xlabel('z/\delta','FontSize',8);
 set(gca,'FontSize',8);
-ylim([-0.6 0.6]);
+ylim([-0.6 1.2]);
+set(gca,'XMinorTick','on','YMinorTick','on');
 box on;
 %----------------------------------------------------------------------------
 subplot(5,3,[9,12]);
@@ -262,12 +269,12 @@ for mmm = 1:size(m_data,2)
     plot(heightVec./BLH, m_data(:,mmm)./ustar^3,LineMarkers{mmm});
 end
 plot([0 1], [0 0],'--k');
-ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
-text(text_x_pos,text_y_pos*0.9, ann_str,'Units','Normalized','FontSize',8);
+ann_str = sprintf('r_n\\equiv%2.2f\\delta',n_scale/BLH);
+text(text_x_pos*0.9,text_y_pos*0.95, ann_str,'Units','Normalized','FontSize',8);
 xlabel('z/\delta','FontSize',8);
-%legendflex(lgndVal, 'nrow', 2,'ncol',3,'box','off','ref', gca, 'anchor', [2 6], 'buffer', [-2 -2]);
 set(gca,'FontSize',8);
-ylim([-0.6 0.6]);
+ylim([-0.6 1.2]);
+set(gca,'XMinorTick','on','YMinorTick','on');
 box on;
 %----------------------------------------------------------------------------
 hax = subplot(5,3,[13,14,15], 'Position',[0.15 0.08 0.72 0.11]);
@@ -278,14 +285,14 @@ hold all;
 plot([0,1],[2.2,2.2],LineMarkers{1}); text(1.2,2.3,lgndVal{1});
 plot([3,4],[2.2,2.2],LineMarkers{2}); text(4.2,2.3,lgndVal{2});
 plot([6,7],[2.2,2.2],LineMarkers{3}); text(7.2,2.3,lgndVal{3});
-plot([0,1],[1,1],LineMarkers{4}); text(1.2,1,lgndVal{4});
-plot([3,4],[1,1],LineMarkers{5}); text(4.2,1,lgndVal{5});
-plot([6,7],[1,1],LineMarkers{6}); text(7.2,1,lgndVal{6});
+plot([0,1],[1,1],LineMarkers{4}); text(1.2,1.2,lgndVal{4});
+plot([3,4],[1,1],LineMarkers{5}); text(4.2,1.2,lgndVal{5});
+plot([6,7],[1,1],LineMarkers{6}); text(7.2,1.2,lgndVal{6});
 
 xlim([-0.5 9]);
 ylim([0.5 3]);
 
-SPR = sprintf('%s%s','','tmn_chnl_fixed_n.eps');  
+SPR = sprintf('%s%','tmn_chnl_fixed_n.eps');  
 set(gcf, 'Color', 'w');
 print(formatEng,SPR);
 
@@ -331,6 +338,7 @@ ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
 ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
 ylabel('T^{(m,n)}(z,k_m|k_n)/u_*^3','FontSize',8);
+set(gca,'XMinorTick','on','YMinorTick','on');
 
 subplot(242);
 hold all;
@@ -362,7 +370,7 @@ ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
 % text(text_x_pos,text_y_pos, ann_str,'Units','Normalized');
 ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
-
+set(gca,'XMinorTick','on','YMinorTick','on');
 
 subplot(243); hold all;
 select_n = 6; select_h = 6;
@@ -393,6 +401,7 @@ ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
 ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
 % xlabel('2^{m}h/\delta');
+set(gca,'XMinorTick','on','YMinorTick','on');
 
 subplot(244);
 hold all;
@@ -412,7 +421,6 @@ for ff = 1:nframe
 end
 m_data = mean(m_data_frame,2);
 sigma_m_data = mean(sigma_m_data_frame,2);
-
 bounds =  repmat(ones([length(m_data) 1]).*sigma_m_data,[1 2]);
 % [l,p]= boundedline(m_in_m./BLH, m_data./ustar^3,...
 %         bounds./ustar^3.*0.5,'-or', 'transparency', 0.3);
@@ -425,6 +433,7 @@ ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
 ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
 % xlabel('2^{m}h/\delta');
+set(gca,'XMinorTick','on','YMinorTick','on');
 
 % == how all scales larger than 5.33\delta interact with smaller scales ===
 subplot(245);
@@ -458,6 +467,7 @@ ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
 xlabel('r_{m}/\delta');
 ylabel('T^{(m,n)}(z,k_m|k_n)/u_*^3','FontSize',8);
+set(gca,'XMinorTick','on','YMinorTick','on');
 
 subplot(246);
 hold all;
@@ -489,7 +499,7 @@ ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
 ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
 xlabel('r_{m}/\delta');
-
+set(gca,'XMinorTick','on','YMinorTick','on');
 
 subplot(247);
 hold all;
@@ -521,6 +531,7 @@ ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
 ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
 xlabel('r_{m}/\delta');
+set(gca,'XMinorTick','on','YMinorTick','on');
 
 subplot(248);
 hold all;
@@ -552,7 +563,8 @@ ann_str = sprintf('n\\equiv%2.2f\\delta',n_scale/BLH);
 ann_str = sprintf('h=%2.2f\\delta',tenergy{select_h}.h/BLH);
 text(0.5,text_y_pos, ann_str,'Units','Normalized');
 xlabel('r_{m}/\delta');
+set(gca,'XMinorTick','on','YMinorTick','on');
 
-SPR = sprintf('%s%s','','tmn_chnl_fixed_n_fixed_h.eps');  
+SPR = sprintf('%s','tmn_chnl_fixed_n_fixed_h.eps');  
 set(gcf, 'Color', 'w');
-%print(formatEng,SPR);
+print(formatEng,SPR);
